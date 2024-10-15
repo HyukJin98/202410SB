@@ -1,5 +1,7 @@
 package edu.du.sb1014_2.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -7,6 +9,8 @@ import java.sql.Date;
 
 @ToString
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "t_board")
 public class Board {
     @Id
