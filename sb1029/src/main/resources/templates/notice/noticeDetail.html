@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세 보기</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h2>게시글 상세 보기</h2>
+    <div>
+        <label>글번호:</label>
+        <span th:text="${notice.id}"></span>
+    </div>
+    <div>
+        <label>제목:</label>
+        <span th:text="${notice.title}"></span>
+    </div>
+    <div>
+        <label>내용:</label>
+        <p th:text="${notice.content}"></p>
+    </div>
+    <div>
+        <label>조회수:</label>
+        <span th:text="${notice.hitCnt}"></span>
+    </div>
+    <div>
+        <label>작성일:</label>
+        <span th:text="${notice.createdDatetime}"></span>
+    </div>
+    <a th:href="@{/notice/openNoticeList}" class="btn">목록으로</a>
+    <a th:href="@{'/notice/updateNotice?id=' + ${notice.id}}" class="btn">수정</a>
+    <a th:href="@{'/notice/deleteNotice?id=' + ${notice.id}}" class="btn" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+</div>
+</body>
+</html>

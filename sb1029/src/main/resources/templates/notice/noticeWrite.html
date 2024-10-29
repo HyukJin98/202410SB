@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 작성</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+  <h2>게시글 작성</h2>
+  <form th:action="@{/notice/insertNotice}" method="post">
+    <div>
+      <label for="title">제목:</label>
+      <input type="text" id="title" name="title" required />
+    </div>
+    <div>
+      <label for="content">내용:</label>
+      <textarea id="content" name="content" required></textarea>
+    </div>
+    <button type="submit" class="btn">등록</button>
+    <a th:href="@{/notice/openNoticeList}" class="btn">취소</a>
+  </form>
+</div>
+</body>
+</html>

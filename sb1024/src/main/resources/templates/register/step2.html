@@ -8,10 +8,8 @@
 <h2 th:text="#{member.info}"></h2>
 
 <form th:action="@{/register/step3}" th:object="${registerRequest}" method="post">
+  <p th:if="${#fields.hasErrors('*')}" th:text="#{notMatchingPassword}"></p>
 
-  <div th:if="${#fields.hasErrors() and #fields.errors().contains('notMatchingPassword')}">
-    <p th:text="#{notMatchingPassword}"></p>
-  </div>
   <p>
     <label>
       <span th:text="#{email}">이메일</span>:<br>
