@@ -7,30 +7,63 @@
 </head>
 <body>
 <div class="container">
-    <h2>게시글 상세 보기</h2>
-    <div>
-        <label>글번호:</label>
-        <span th:text="${notice.id}"></span>
-    </div>
-    <div>
-        <label>제목:</label>
-        <span th:text="${notice.title}"></span>
-    </div>
-    <div>
-        <label>내용:</label>
-        <p th:text="${notice.content}"></p>
-    </div>
-    <div>
-        <label>조회수:</label>
-        <span th:text="${notice.hitCnt}"></span>
-    </div>
-    <div>
-        <label>작성일:</label>
-        <span th:text="${notice.createdDatetime}"></span>
-    </div>
-    <a th:href="@{/notice/openNoticeList}" class="btn">목록으로</a>
-    <a th:href="@{'/notice/updateNotice?id=' + ${notice.id}}" class="btn">수정</a>
-    <a th:href="@{'/notice/deleteNotice?id=' + ${notice.id}}" class="btn" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+    <form id="frm" method="post" >
+        <!-- 글번호 (읽기 전용) -->
+        <div>
+            <label>글번호:</label>
+            <span th:text="${notice.id}"></span>
+            <input type="hidden" name="id" th:value="${notice.id}"/>
+        </div>
+
+        <!-- 제목 (수정 가능) -->
+        <div>
+            <label>제목:</label>
+            <input type="text" name="title" th:value="${notice.title}" required/>
+        </div>
+
+        <!-- 내용 (수정 가능) -->
+        <div>
+            <label>내용:</label>
+            <textarea name="content" rows="5" required th:text="${notice.content}"></textarea>
+        </div>
+
+        <!-- 조회수 및 작성일 (읽기 전용) -->
+        <div>
+            <label>조회수:</label>
+            <span th:text="${notice.hitCnt}"></span>
+        </div>
+        <div>
+            <label>작성일:</label>
+            <span th:text="${notice.createdDatetime}"></span>
+        </div>
+
+    <!-- 목록으로, 수정하기, 삭제하기 버튼 -->
+    <a href="#this" id="list" class="btn">목록으로</a>
+    <a href="#this" id="edit" class="btn">수정하기</a>
+    <a href="#this" id="delete" class="btn">삭제하기</a>
+
+    </form>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#list").on("click", function(){
+            location.href = "/notice/openNoticeList";
+        });
+
+        $("#edit").on("click", function(){
+            var frm = $("#frm");
+            frm.attr("action", "/notice/updateNotice");
+            frm.submit();
+        });
+
+        $("#delete").on("click", function(){
+            var frm = $("#frm");
+            frm.attr("action", "/notice/deleteNotice");
+            frm.submit();
+        });
+    });
+</script>
 </body>
 </html>

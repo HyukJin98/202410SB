@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoticeService implements NoticeServ {
@@ -45,19 +46,12 @@ public class NoticeService implements NoticeServ {
     @Transactional
     @Override
     public void updateNotice(Notice notice){
-        Notice existingNotice = noticeRepository.findById(notice.getId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 공지를 찾을 수 없습니다. id=" + notice.getId()));
-
-        // 빌더 패턴을 사용하여 기존 데이터를 새로 업데이트된 데이터로 변경
-        Notice updatedNotice = Notice.builder()
-                .id(existingNotice.getId()) // ID는 기존 ID 유지
-                .title(notice.getTitle()) // 변경할 필드
-                .content(notice.getContent()) // 변경할 필드
-                .hitCnt(existingNotice.getHitCnt()) // 조회수는 그대로 유지
-                .createdDatetime(existingNotice.getCreatedDatetime()) // 생성일시 그대로 유지
-                .build();
-
-        noticeRepository.save(updatedNotice);
+        notice = noticeRepository.findNoticeById(notice.getId());
+        notice.setTitle(notice.getTitle());
+        notice.setContent(notice.getContent());
+        notice.setHitCnt(notice.getHitCnt()+1);
+        notice.setUpdatedDatetime(LocalDateTime.now().toString());
+        noticeRepository.save(notice);
     }
 
     @Transactional

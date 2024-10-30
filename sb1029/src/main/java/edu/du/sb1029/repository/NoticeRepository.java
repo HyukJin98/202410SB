@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface NoticeRepository extends JpaRepository<Notice, Integer> {
 
     public Notice findAllByOrderByIdDesc();
+
+    public Notice findNoticeById(int id);
 }

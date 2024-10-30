@@ -15,7 +15,7 @@ public interface NoticeServ {
     Notice selectNoticeDetail(int id);
 
     @Transactional
-    void updateNotice(Notice notice);
+    void updateNotice(Notice notice) throws Exception;
 
     @Transactional
     void deleteNotice(int id);

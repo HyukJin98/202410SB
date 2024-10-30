@@ -12,6 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Setter
 public class Notice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
