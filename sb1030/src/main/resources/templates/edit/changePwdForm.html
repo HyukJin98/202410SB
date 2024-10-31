@@ -5,7 +5,7 @@
   <title th:text="#{change.pwd.title}">Change Password</title>
 </head>
 <body>
-<form th:action="@{/edit/changePassword}" th:object="${changePasswordCommand}" method="post">
+<form th:action="@{/edit/changePassword}" th:object="${command}" method="post">
   <p>
     <label th:text="#{currentPassword}">Current Password:</label><br>
     <input type="password" th:field="*{currentPassword}" />

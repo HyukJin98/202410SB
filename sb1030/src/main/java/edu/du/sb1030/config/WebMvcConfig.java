@@ -1,5 +1,6 @@
 package edu.du.sb1030.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -12,10 +13,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoggerInterceptor())
                 .addPathPatterns("/view/main/**")
                 .excludePathPatterns("/css/**", "/js/**");
+        registry.addInterceptor(new AuthCheckInterceptor())
+                .addPathPatterns("/edit/**");
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("/view/main");
     }
+
+    @Bean
+    public AuthCheckInterceptor authCheckInterceptor() {
+        return new AuthCheckInterceptor();
+    }
+
+
 }

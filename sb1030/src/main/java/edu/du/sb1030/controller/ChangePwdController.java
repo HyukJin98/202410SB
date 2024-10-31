@@ -26,20 +26,18 @@ public class ChangePwdController {
 
 	@GetMapping
 	public String form(
-			@ModelAttribute("command") ChangePwdCommand pwdCmd,Model model) {
-		model.addAttribute("changePasswordCommand", pwdCmd);
-		return "edit/changePwdForm";
+			@ModelAttribute("command") ChangePwdCommand pwdCmd) {
+		return "/edit/changePwdForm";
 	}
 
 	@PostMapping
 	public String submit(
 			@ModelAttribute("command") ChangePwdCommand pwdCmd,
 			Errors errors,
-			HttpSession session, Model model) {
+			HttpSession session) {
 		new ChangePwdCommandValidator().validate(pwdCmd, errors);
-		model.addAttribute("changePasswordCommand", pwdCmd);
 		if (errors.hasErrors()) {
-			return "edit/changePwdForm";
+			return "/edit/changePwdForm";
 		}
 		AuthInfo authInfo = (AuthInfo) session.getAttribute("authInfo");
 		try {
@@ -47,10 +45,10 @@ public class ChangePwdController {
 					authInfo.getEmail(),
 					pwdCmd.getCurrentPassword(),
 					pwdCmd.getNewPassword());
-			return "edit/changedPwd";
+			return "/edit/changedPwd";
 		} catch (WrongIdPasswordException e) {
 			errors.rejectValue("currentPassword", "notMatching");
-			return "edit/changePwdForm";
+			return "/edit/changePwdForm";
 		}
 	}
 }

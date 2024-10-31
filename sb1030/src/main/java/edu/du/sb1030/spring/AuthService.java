@@ -3,12 +3,15 @@ package edu.du.sb1030.spring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class AuthService {
 
 	@Autowired
 	private MemberDao memberDao;
 
+	@Transactional
 	public AuthInfo authenticate(String email,String password) {
 		Member member = memberDao.selectByEmail(email);
 		if(member == null) {

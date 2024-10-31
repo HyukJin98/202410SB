@@ -1,5 +1,6 @@
 package edu.du.sb1030.spring;
 
+
 public class AuthInfo {
 	private Long id;
 	private String email;
