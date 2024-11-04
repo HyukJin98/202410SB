@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
 <head>
   <meta charset="UTF-8">
   <title th:text="#{login.title}">Login</title>
@@ -21,6 +23,10 @@
       <span th:text="#{password}">Password</span>:<br>
       <input type="password" th:field="*{password}" />
       <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</p>
+    </label>
+  </p>
+  <p>
+    <label>
     </label>
   </p>
   <input type="submit" th:value="#{login.btn}" />
