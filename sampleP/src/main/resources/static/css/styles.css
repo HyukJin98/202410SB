@@ -1,0 +1,323 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sidebar {
+  width: 250px;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.sidebar nav ul {
+  list-style: none;
+}
+
+.sidebar nav ul li {
+  margin: 10px 0;
+}
+
+.sidebar nav ul li a {
+  color: #333;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.sidebar .count {
+  background-color: #f56342;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.sidebar .sub-menu a {
+  display: block;
+  margin: 8px 0;
+  color: #666;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.main-content h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.post-list .post {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.post h3 {
+  font-size: 18px;
+  color: #333;
+}
+
+.post p {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.post span {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.right-widget {
+  width: 300px;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.profile h3 {
+  font-size: 20px;
+  color: #333;
+}
+
+.profile p {
+  font-size: 14px;
+  color: #666;
+}
+
+.create-cafe {
+  background-color: #36a2eb;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.notices h4 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.notices ul {
+  list-style: none;
+}
+
+.notices ul li a {
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+}
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-image: url('/images/흰색배경.jpg');
+  background-size: cover; /* 이미지가 화면을 꽉 채우도록 설정 */
+  background-position: center; /* 배경 이미지가 화면 중앙에 오도록 설정 */
+  background-attachment: fixed; /* 스크롤 시 배경 이미지 고정 */
+}
+/* 전체 컨테이너 */
+.container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 10px;
+  height: 100%; /* 컨테이너 높이를 100%로 설정 */
+  width: 100%; /* 컨테이너 너비를 100%로 설정 */
+}
+
+/* 왼쪽 사이드바 */
+.sidebar {
+  width: 20%; /* 왼쪽 사이드바 너비 20% */
+  background-color: #f4f4f4;
+  padding: 20px;
+  box-sizing: border-box; /* 패딩을 크기에 포함 */
+  height: 100vh; /* 화면 전체 높이 */
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+  width: 55%; /* 중앙 콘텐츠는 화면의 55% 차지 */
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 100%; /* 높이를 100%로 설정 */
+  overflow-y: auto; /* 내용이 넘치면 스크롤 */
+}
+
+/* 오른쪽 위젯 */
+.right-widget {
+  width: 20%; /* 오른쪽 위젯 너비 20% */
+  background-color: #f4f4f4;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 100vh; /* 화면 전체 높이 */
+}
+.profile button, .profile a {
+  display: block;
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+.profile button:hover, .profile a:hover {
+  background-color: #0056b3;
+}
+.post {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 화면 전체 높이 */
+  background-color: #f0f2f5; /* 배경 색상 */
+  font-family: Arial, sans-serif; /* 기본 글꼴 */
+}
+
+.login-container {
+  background-color: white; /* 배경 색상 */
+  padding: 2rem; /* 안쪽 여백 */
+  border-radius: 8px; /* 모서리 둥글게 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  width: 300px; /* 고정된 너비 */
+  text-align: center; /* 가운데 정렬 */
+}
+
+.login-container img {
+  width: 100px; /* 이미지 너비 */
+  margin-bottom: 1rem; /* 이미지와 텍스트 간격 */
+}
+
+h2 {
+  margin-bottom: 1.5rem; /* 제목과 폼 간격 */
+  color: #333; /* 제목 색상 */
+}
+
+label {
+  display: block; /* 레이블 블록으로 표시 */
+  margin-bottom: 0.5rem; /* 레이블과 입력 간격 */
+  text-align: left; /* 왼쪽 정렬 */
+  color: #555; /* 레이블 색상 */
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%; /* 너비 100% */
+  padding: 0.5rem; /* 안쪽 여백 */
+  margin-bottom: 1rem; /* 입력 필드 간격 */
+  border: 1px solid #ccc; /* 테두리 */
+  border-radius: 4px; /* 테두리 둥글게 */
+  font-size: 16px; /* 글자 크기 */
+}
+
+button {
+  background-color: #007bff; /* 버튼 배경 색상 */
+  color: white; /* 버튼 글자 색상 */
+  border: none; /* 테두리 없음 */
+  border-radius: 4px; /* 버튼 둥글게 */
+  padding: 0.5rem; /* 버튼 안쪽 여백 */
+  cursor: pointer; /* 마우스 커서 */
+  width: 100%; /* 너비 100% */
+  font-size: 16px; /* 글자 크기 */
+  margin-bottom: 1rem; /* 버튼 간격 추가 */
+}
+
+button:hover {
+  background-color: #0056b3; /* 버튼 호버 색상 */
+}
+
+.register-button {
+  margin-top: 0.5rem; /* 회원가입 버튼과 로그인 버튼 간격 조정 */
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  padding-top: 60px;
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+.post-form {
+  width: 100%;      /* 폼의 너비를 부모의 100%로 설정 */
+  max-width: 600px; /* 최대 너비를 600px로 제한 */
+  margin: 0 auto;   /* 폼을 화면 가운데 정렬 */
+  padding: 20px;    /* 폼 내부 여백 */
+  box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
+}
+
+/* 텍스트 입력 필드 크기 조정 */
+.post-form input[type="text"],
+.post-form textarea {
+  width: 100%;        /* 입력 필드의 너비를 폼의 너비에 맞춤 */
+  padding: 10px;      /* 여백 추가 */
+  margin-bottom: 15px; /* 아래쪽 여백 추가 */
+  box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
+}
+
+/* 텍스트 영역 크기 조정 */
+.post-form textarea {
+  height: 200px; /* 텍스트 영역 높이 설정 */
+  resize: vertical; /* 수직으로만 크기 조정 가능하도록 설정 */
+}
+
+/* 버튼 스타일 */
+.post-form button {
+  padding: 10px 20px;  /* 버튼 여백 */
+  margin-right: 10px;   /* 버튼 간격 */
+  cursor: pointer;     /* 클릭할 수 있는 커서 표시 */
+}
+
+.comment-form-container {
+  margin-top: 30px; /* 게시글 아래로 간격을 추가 */
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 800px; /* 댓글 폼의 최대 너비 */
+  margin-left: auto;
+  margin-right: auto;
+}
+

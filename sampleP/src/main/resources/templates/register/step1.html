@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org">
+
+<head>
+  <title th:text="#{member.register}">Member Register</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+</head>
+<body>
+<div class="login-container">
+<h2 th:text="#{term}">Terms</h2>
+<p>회원 가입을 원하시면 동의눌러</p>
+<form th:action="@{/register/step2}" method="post">
+  <label>
+    <input type="checkbox" name="agree" value="true">
+    <span th:text="#{term.agree}">I agree to the terms</span>
+  </label>
+  <input type="submit" th:value="#{next.btn}" />
+</form>
+</div>
+</body>
+</html>

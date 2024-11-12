@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http//www.thymeleaf.org">
+<head>
+  <title th:text="#{member.register}">Member Register</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="login-container">
+<p th:text="#{register.done(${registerRequest.name}, ${registerRequest.email})}">
+  Registration completed for [Name] and [Email]
+</p>
+<p><a th:href="@{/sample/all}">[첫 화면 이동]</a></p>
+</div>
+</body>
+</html>

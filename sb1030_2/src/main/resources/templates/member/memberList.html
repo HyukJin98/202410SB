@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원 조회</title>
+</head>
+<body>
+<form th:action="@{/members}" th:object="${cmd}" method="post">
+  <p>
+    <label>from: <input type="text" th:field="*{from}" /></label>
+  <div th:if="${#fields.hasErrors('from')}" th:errors="*{from}"></div>
+  ~
+  <label>to: <input type="text" th:field="*{to}" /></label>
+  <div th:if="${#fields.hasErrors('to')}" th:errors="*{to}"></div>
+  <input type="submit" value="조회">
+  </p>
+</form>
+
+<div th:if="${members != null}">
+  <table>
+    <tr>
+      <th>아이디</th><th>이메일</th>
+      <th>이름</th><th>가입일</th>
+    </tr>
+    <tr th:each="mem : ${members}">
+      <td th:text="${mem.id}"></td>
+      <td>
+        <a th:href="@{/members/{id}(id=${mem.id})}" th:text="${mem.email}"></a>
+      </td>
+      <td th:text="${mem.name}"></td>
+      <td th:text="${#temporals.format(mem.registerDateTime, 'yyyy-MM-dd')}"></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
