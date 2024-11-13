@@ -32,7 +32,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/js/**", "/images/**", "/register/**", "/login", "/basic","/","/posts/**","/user/**","update-success").permitAll() // /basic을 permitAll()로 설정
+                .antMatchers("/css/**", "/js/**", "/images/**", "/register/**", "/login", "/basic","/","/posts/**","/user/**","update-success","/comments/**","/assets/**","/upload","/uploads/**").permitAll() // /basic을 permitAll()로 설정
                 .anyRequest().authenticated() // 그 외의 경로는 인증이 필요하도록 설정
                 .and()
                 .formLogin()

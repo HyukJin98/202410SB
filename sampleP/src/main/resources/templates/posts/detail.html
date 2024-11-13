@@ -3,283 +3,9 @@
 <head>
     <title>게시글 상세보기</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <style>
-        body.post-detail {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #f3f4f6;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-        }
+    <link rel="stylesheet" href="/css/style2.css">
+    <script src="/js/compressed_script.js"></script>
 
-        .post-container {
-            width: 100%;
-            max-width: 900px;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            margin: 20px;
-            box-sizing: border-box;
-            max-height: 800px; /* 컨테이너의 최대 높이 */
-            overflow-y: auto; /* 내용이 넘칠 경우 스크롤 추가 */
-        }
-
-        .post-title {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #e5e5e5;
-            padding-bottom: 10px;
-        }
-
-        .post-meta {
-            display: flex;
-            justify-content: space-between;
-            color: #888;
-            font-size: 16px;
-            margin-bottom: 25px;
-        }
-
-        .post-content {
-            font-size: 18px;
-            line-height: 1.8;
-            color: #444;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-sizing: border-box;
-        }
-
-        .post-actions {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .edit-button, .delete-button, .back-link {
-            padding: 8px 16px; /* 버튼 크기 조정 */
-            font-size: 14px; /* 글자 크기 조정 */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            width: auto; /* 버튼 너비 자동으로 맞추기 */
-        }
-
-        .delete-button {
-            background-color: #d9534f;
-            color: #fff;
-        }
-
-        .delete-button:hover {
-            background-color: #c9302c;
-        }
-
-        .edit-button {
-            background-color: #5bc0de;
-            color: #fff;
-        }
-
-        .edit-button:hover {
-            background-color: #31b0d5;
-        }
-
-        .back-link {
-            color: #007bff;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-            transition: background-color 0.3s;
-        }
-
-
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.4);
-                padding-top: 60px;
-            }
-
-            .modal-content {
-                background-color: #fefefe;
-                margin: 5% auto;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 80%;
-                max-width: 500px;
-                box-sizing: border-box;
-            }
-
-            .close {
-                color: #aaa;
-                font-size: 28px;
-                font-weight: bold;
-                position: absolute;
-                top: 0;
-                right: 25px;
-                padding: 10px;
-                cursor: pointer;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-            }
-
-            .submit-button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                cursor: pointer;
-                width: 100%;
-                margin-top: 10px;
-                transition: background-color 0.3s;
-            }
-
-            .submit-button:hover {
-                background-color: #45a049;
-            }
-
-            input[type="text"], textarea {
-                width: 100%;
-                padding: 10px;
-                margin-top: 8px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                box-sizing: border-box;
-            }
-
-            /* 댓글 섹션 스타일 */
-
-            .comments-section {
-                margin-top: 40px;
-                padding: 20px;
-                background-color: #f1f1f1; /* 댓글 배경을 게시글과 다르게 설정 */
-                border-radius: 10px;
-            }
-
-            .comment-list {
-                margin-top: 30px;
-                max-height: 400px; /* 댓글 목록의 최대 높이 */
-                overflow-y: auto; /* 내용이 넘칠 경우 스크롤 추가 */
-            }
-
-            .comment-item {
-                margin-bottom: 20px;
-                padding: 15px;
-                background-color: #ffffff;
-                border-radius: 8px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-
-            .comment-author {
-                font-weight: bold;  /* 글씨를 굵게 */
-                color: #007bff;     /* 파란색으로 텍스트 색상 변경 */
-                background-color: #f0f0f0;  /* 배경 색상 추가 */
-                padding: 5px 10px;  /* 텍스트 주변에 여백 추가 */
-                border-radius: 5px; /* 둥근 모서리 */
-            }
-
-            .comment-date {
-                color: #888;
-                font-size: 14px;
-            }
-
-            .comment-content {
-                font-size: 16px;
-                color: #444;
-                margin: 10px 0;
-            }
-
-            .comment-actions {
-                display: flex;
-                gap: 10px;
-            }
-
-            .comment-actions button {
-                font-size: 14px;
-                color: #fff;
-                padding: 5px 10px;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-
-            /* 댓글 작성 폼 스타일 */
-
-            .comment-form-container {
-                margin-top: 30px;
-                padding: 20px;
-                background-color: #fff;
-                border-radius: 10px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-
-            .comment-form-container h3 {
-                margin-bottom: 15px;
-            }
-
-            .comment-form-container textarea {
-                width: 100%;
-                padding: 10px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                box-sizing: border-box;
-                margin-bottom: 20px;
-            }
-
-            .comment-form-container button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .comment-form-container button:hover {
-                background-color: #45a049;
-            }
-
-            /* 모바일 반응형 */
-            @media (max-width: 768px) {
-                .post-container {
-                    width: 90%;
-                    padding: 20px;
-                }
-
-                .post-title {
-                    font-size: 24px;
-                }
-
-                .post-content {
-                    font-size: 16px;
-                }
-
-                .modal-content {
-                    width: 95%;
-                }
-            }
-
-
-    </style>
 </head>
 
 <body class="post-detail">
@@ -287,16 +13,37 @@
 
 <div class="post-container">
     <h1 class="post-title" th:text="${post.title}">게시글 제목</h1>
+
     <div class="post-meta">
         <p class="post-author" th:text="'작성자: ' + ${post.user.username}">작성자</p>
         <p class="post-date" th:text="'작성일: ' + ${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</p>
     </div>
-    <div class="post-content" th:text="${post.content}">게시글 내용</div>
+    <div class="post-content" th:text="${post.content}">
+
+    </div>
+    <!-- 첨부파일 처리 -->
+    <div class="post-files" th:if="${post.files != null and !#lists.isEmpty(post.files)}">
+        <ul style="list-style-type: none;">
+            <li th:each="file : ${post.files}">
+                <!-- 이미지 파일일 경우 바로 표시, 그 외 파일은 다운로드 링크 제공 -->
+                <span th:if="${#strings.endsWith(file.fileName, '.jpg') or #strings.endsWith(file.fileName, '.jpeg') or #strings.endsWith(file.fileName, '.png') or #strings.endsWith(file.fileName, '.gif')}">
+                <img th:src="@{'/uploads/' + ${file.fileName}}" alt="첨부 이미지" style="max-width: 100%; height: auto;"/>
+            </span>
+                <span th:unless="${#strings.endsWith(file.fileName, '.jpg') or #strings.endsWith(file.fileName, '.jpeg') or #strings.endsWith(file.fileName, '.png') or #strings.endsWith(file.fileName, '.gif')}">
+                <a th:href="@{'/uploads/' + ${file.fileName}}" th:text="${file.fileName}">첨부파일</a>
+            </span>
+            </li>
+        </ul>
+    </div>
+
 
     <div class="post-actions">
         <form th:action="@{/posts/{id}(id=${post.id})}" method="post" class="delete-form">
             <input type="hidden" name="_method" value="delete" />
-            <button type="submit" class="delete-button">삭제</button>
+            <button type="submit" class="delete-post-button"
+                    th:attr="data-post-id=${post.id}, data-post-author=${post.user.username}, data-current-user=${#authentication.name}">
+                삭제
+            </button>
         </form>
         <button type="button" class="edit-button" onclick="openEditModal()">수정</button>
         <a href="/" class="back-link">목록으로 돌아가기</a>
@@ -306,44 +53,122 @@
         <div class="comment-list" id="comment-list">
             <ul>
                 <li th:each="comment : ${comments}" class="comment-item">
-                    <div th:if="${#lists.isEmpty(comments)}">
-                        <p>댓글이 없습니다.</p>
-                    </div>
+                    <!-- 댓글 내용 -->
                     <p class="comment-author" th:text="${comment.user != null && comment.user.username != null ? comment.user.username : '알 수 없음'}"></p>
                     <p class="comment-content" th:text="${comment.content}"></p>
                     <p class="comment-date" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
+
+                    <!-- 댓글 수정, 삭제 -->
                     <div class="comment-actions">
+                        <button type="button" class="edit-button"
+                                th:attr="onclick=|openEditCommentModal(${comment.id}, ${post.id}, '${comment.content}')|">
+                            수정
+                        </button>
                         <form th:action="@{/comments/{commentId}/delete(commentId=${comment.id})}" method="post">
                             <input type="hidden" name="_method" value="delete" />
                             <input type="hidden" name="postId" th:value="${post.id}" />
-                            <button type="submit" class="delete-button">삭제</button>
+                            <button type="button" class="delete-button"
+                                    th:attr="data-comment-id=${comment.id}">
+                                삭제
+                            </button>
                         </form>
+                        <button type="button" class="reply-button" th:onclick="|toggleReplyForm(${comment.id})|">답글 작성</button>
+                    </div>
+
+                    <!-- 답글 작성 버튼 -->
+
+
+                    <!-- 댓글별 답글 작성 폼 -->
+                    <div class="comment-form-container" th:id="'reply-form-container-' + ${comment.id}" style="display: none;">
+                        <h3>답글 작성</h3>
+                        <form th:action="@{/comments/reply}" method="post">
+                            <input type="hidden" name="postId" th:value="${post.id}">
+                            <input type="hidden" name="parentCommentId" th:value="${comment.id}">
+                            <div>
+                                <label for="content-${comment.id}">답글 내용</label>
+                                <textarea id="content-${comment.id}" name="content" rows="4" cols="50" required></textarea>
+                            </div>
+                            <button type="submit">답글 작성 완료</button>
+                        </form>
+                    </div>
+
+                    <!-- 답글 리스트 -->
+                    <div class="reply-list" th:if="${comment.replies != null and !#lists.isEmpty(comment.replies)}">
+                        <ul>
+                            <li th:each="reply : ${comment.replies}" class="reply-item">
+                                <div class="reply-content">
+                                    <p class="comment-author" th:text="${reply.user != null && reply.user.username != null ? reply.user.username : '알 수 없음'}"></p>
+                                    <p class="comment-content" th:text="${reply.content}"></p>
+                                    <p class="comment-date" th:text="${#temporals.format(reply.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
+                                </div>
+
+                                <!-- 답글 삭제 버튼 -->
+                                <div class="reply-actions">
+                                    <button type="button"
+                                            class="edit-button2"
+                                            th:attr="data-reply-id=${reply.id}, data-reply-content=${reply.content}"
+                                            onclick="openEditReplyModal2(this)">
+                                        수정
+                                    </button>
+                                    <form th:action="@{/comments/reply/{replyId}/delete(replyId=${reply.id})}" method="post">
+                                        <!-- 댓글 삭제에 필요한 데이터 숨기기 -->
+                                        <input type="hidden" name="postId" th:value="${post.id}">
+                                        <input type="hidden" name="replyId" th:value="${reply.id}">
+
+                                        <button
+                                                type="submit"
+                                                class="delete-reply-button"
+                                                th:data-reply-id="${reply.id}"
+                                                th:data-current-user="${currentUser}"
+                                                th:data-reply-author="${reply.author}">
+                                            삭제
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="modal2" th:id="'edit-reply-modal2-' + ${reply.id}" style="display: none;">
+                                    <div class="modal-content2">
+                                        <span class="close-button2" th:onclick="|closeEditReplyModal2(${reply.id})|">&times;</span>
+                                        <h3>답글 수정</h3>
+                                        <form method="post" th:action="@{/comments/reply/{replyId}(replyId=${reply.id})}" th:id="'edit-reply-form2-' + ${reply.id}">
+                                            <input type="hidden" name="postId" th:value="${post.id}">
+                                            <input type="hidden" name="replyId" th:value="${reply.id}">
+                                            <!-- 수정된 textarea -->
+                                            <textarea name="content"
+                                                      th:id="'edit-reply-content2-' + ${reply.id}"
+                                                      required
+                                                      th:text="${reply.content}"></textarea>
+                                            <button type="submit" class="save-reply-button2">저장</button>
+                                            <button type="button" class="cancel-reply-button2" th:onclick="|closeEditReplyModal2(${reply.id})|">취소</button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </li>
+                        </ul>
                     </div>
                 </li>
             </ul>
         </div>
 
 
-        <!-- 댓글 작성 폼 -->
-        <div class="comment-form-container" id="comment-form-container" >
+
+        <!-- 댓글 작성 폼 (기존대로 유지) -->
+        <div class="comment-form-container" id="comment-form-container">
             <h3>댓글 작성</h3>
             <form th:action="@{/comments/add}" method="post">
                 <input type="hidden" name="id" th:value="${post.id}">
                 <input type="hidden" name="commentId" id="commentId">
-
                 <div>
                     <label for="content"></label>
                     <textarea id="content" name="content" rows="4" cols="50" required></textarea>
                 </div>
-
                 <button type="submit">작성 완료</button>
             </form>
         </div>
     </div>
-
 </div>
 
-<!-- 댓글 목록 -->
 
 
 
@@ -360,29 +185,34 @@
             <div>
                 <label for="editContent">내용</label>
                 <textarea id="editContent" name="content" rows="4" th:text="${post.content}" required></textarea>
-            </div>
+            </div>\
             <button type="submit" class="submit-button">수정 완료</button>
         </form>
     </div>
 </div>
 
+<!-- 댓글 수정 모달 -->
+<div id="editCommentModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">댓글 수정</h5>
+                <button type="button" class="close" onclick="closeEditCommentModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Hidden inputs to store commentId and postId -->
+                <input type="hidden" id="edit-comment-id">
+                <input type="hidden" id="edit-post-id">
+                <textarea id="edit-comment-content" class="form-control"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="updateCommentAjax()">수정 완료</button>
+                <button type="button" class="btn btn-secondary" onclick="closeEditCommentModal()">취소</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-<script>
-    function openEditModal() {
-        document.getElementById('editModal').style.display = "block";
-    }
-
-
-    function closeEditModal() {
-        document.getElementById('editModal').style.display = "none";
-    }
-
-    window.onclick = function(event) {
-        if (event.target == document.getElementById('editModal')) {
-            closeEditModal();
-        }
-    }
-</script>
 </body>
 </html>

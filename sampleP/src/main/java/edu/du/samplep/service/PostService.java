@@ -1,12 +1,18 @@
 package edu.du.samplep.service;
 
+import edu.du.samplep.entity.FileUpload;
 import edu.du.samplep.entity.Post;
+import edu.du.samplep.repository.FileUploadRepository;
 import edu.du.samplep.repository.PostRepository;
 import edu.du.samplep.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +26,16 @@ public class PostService {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private FileUploadRepository fileUploadRepository;
 
     public List<Post> getAllPosts() {
         return postRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
+    }
+
+    public Page<Post> getAllPostsWithPagingAndSorting(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("createdAt")));
+        return postRepository.findAll(pageable);
     }
 
     public Optional<Post> getPostById(Long id) {
@@ -39,8 +52,18 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
+    public void deletePost(Long postId) {
+        // 게시글 조회
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("게시글을 찾을 수 없습니다."));
+
+        // 파일 삭제
+        List<FileUpload> files = fileUploadRepository.findByPost(post);
+        for (FileUpload file : files) {
+            fileUploadRepository.delete(file); // 파일 삭제
+        }
+
+        // 게시글 삭제
+        postRepository.delete(post);
     }
 
     public Post updatePost(Long id, Post postDetails) {
@@ -60,5 +83,9 @@ public class PostService {
     public List<Post> getTopViewedPosts() {
         return postRepository.findTop5ByOrderByViewsDesc();
     }
+
+
+
+
 
 }

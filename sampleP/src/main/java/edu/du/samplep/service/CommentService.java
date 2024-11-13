@@ -2,8 +2,11 @@ package edu.du.samplep.service;
 
 import edu.du.samplep.entity.Comment;
 import edu.du.samplep.entity.Post;
+import edu.du.samplep.entity.Reply;
 import edu.du.samplep.entity.User;
 import edu.du.samplep.repository.CommentRepository;
+import edu.du.samplep.repository.ReplyRepository;
+import edu.du.samplep.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +19,10 @@ import java.util.Optional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+
+    private final ReplyRepository replyRepository;
+
+    private final UserRepository userRepository;
 
 
     public long getCountComments(Long postId) {
@@ -31,8 +38,9 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public void deleteComment(Long commentId) {
-        commentRepository.deleteById(commentId);  // 댓글 삭제
+    @Transactional
+    public int deleteComment(Long commentId) {
+        return commentRepository.deleteCommentById(commentId);
     }
 
     public Optional<Comment> getCommentById(Long commentId) {
@@ -52,4 +60,32 @@ public class CommentService {
             return Optional.empty();  // 댓글이 존재하지 않으면 빈 Optional 반환
         }
     }
+
+    public Comment findById(Long commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
+    // 댓글에 답글 추가
+    public void addReply(Long commentId, Long userId, String content) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+
+        Reply reply = new Reply();
+        reply.setParentComment(comment);
+        reply.setUser(user);
+        reply.setContent(content);
+
+        replyRepository.save(reply);
+    }
+
+    // 특정 댓글에 대한 답글 목록 조회
+    public List<Reply> getRepliesForComment(Long commentId) {
+        return replyRepository.findByParentCommentId(commentId);
+    }
+
+
+
 }

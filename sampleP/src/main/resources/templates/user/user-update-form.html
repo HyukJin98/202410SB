@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>회원 정보 수정</title>
-  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <link rel="stylesheet" th:href="@{/css/profile.css}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
@@ -19,7 +19,7 @@
           data: form.serialize(),  // 폼 데이터 직렬화
           success: function(response) {
             // 성공적으로 수정된 후 알림 메시지 표시
-            alert("회원 정보가 수정되었습니다!");
+            alert("회원 정보가 수정되었습니다 다시 로그인 해주세요!");
             window.location.href = "/";  // 수정 후 프로필 페이지로 리다이렉트
           },
           error: function(xhr, status, error) {

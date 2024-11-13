@@ -78,7 +78,7 @@ public class UserController {
                 SecurityContextHolder.getContext()
         );
 
-        return ResponseEntity.ok("정보 수정 완료");  // 성공 시 메시지 반환
+        return ResponseEntity.ok("회원 정보가 수정되었습니다. 다시 로그인 해주세요");  // 성공 시 메시지 반환
     }
 
     // WebDataBinder에 유효성 검사기 추가

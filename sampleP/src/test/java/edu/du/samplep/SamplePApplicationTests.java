@@ -9,6 +9,7 @@ import edu.du.samplep.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 
@@ -37,8 +38,14 @@ class SamplePApplicationTests {
     @Test
     void Test2(){
 
-        Long comment = commentRepository.countByPost_Id(1L);
-        System.out.println(comment);;
+        Comment comment = new Comment();
+
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // 댓글의 작성자 확인
+        String commentAuthor = comment.getUser().getUsername();
+
+        System.out.println(commentAuthor);
     }
 
 

@@ -31,6 +31,8 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;  // 작성자
 
+    @OneToMany(mappedBy = "post")
+    private List<FileUpload> files;
 
     public Post(Long postId) {
         this.id = postId;
