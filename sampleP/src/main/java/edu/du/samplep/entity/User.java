@@ -22,12 +22,21 @@ public class User {
 
     private String email;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
 
+    private String role;
+
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
+
+    @OneToMany(mappedBy = "sender")
+    private List<Friendship> friendsRequested; // 내가 요청한 친구 관계 목록
+
+    @OneToMany(mappedBy = "receiver")
+    private List<Friendship> friendsReceived;  // 내가 받은 친구 요청 목록
 
     public User(String email, String username, String password) {
         this.email = email;
@@ -37,5 +46,9 @@ public class User {
 
     public User(Long userId) {
         this.id = userId;
+    }
+
+    public String getName() {
+        return username;
     }
 }

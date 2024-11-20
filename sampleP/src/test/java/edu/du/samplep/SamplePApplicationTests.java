@@ -1,7 +1,6 @@
 package edu.du.samplep;
 
 import edu.du.samplep.entity.Comment;
-import edu.du.samplep.entity.Post;
 import edu.du.samplep.entity.User;
 import edu.du.samplep.repository.CommentRepository;
 import edu.du.samplep.repository.PostRepository;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.List;
 
 @SpringBootTest
 class SamplePApplicationTests {
@@ -23,6 +20,8 @@ class SamplePApplicationTests {
     PostRepository postRepository;
     @Autowired
     private CommentRepository commentRepository;
+    @Autowired
+    private NoticeRepository noticeRepository;
 
     @Test
     void contextLoads() {
@@ -47,6 +46,9 @@ class SamplePApplicationTests {
 
         System.out.println(commentAuthor);
     }
+
+
+
 
 
 }

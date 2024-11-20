@@ -25,6 +25,8 @@ public class Post {
 
     private int views;
 
+    private boolean isNotice;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne(fetch = FetchType.LAZY)

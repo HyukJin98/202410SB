@@ -34,6 +34,7 @@ public class UserDetailService implements UserDetailsService {
 
         // 사용자 권한을 생성 (예: ROLE_USER)
         List<SimpleGrantedAuthority> authorities = new ArrayList<>(); // 역할 추가 (예: ROLE_USER)
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
 
         // UserDetails 객체 생성 시 권한을 포함시킴
         return new User(user.getUsername(), user.getPassword(), authorities);

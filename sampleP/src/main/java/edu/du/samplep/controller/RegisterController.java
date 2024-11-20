@@ -2,6 +2,7 @@ package edu.du.samplep.controller;
 
 import edu.du.samplep.service.RegisterRequest;
 import edu.du.samplep.service.UserService;
+import groovyjarjarpicocli.CommandLine;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -62,6 +63,10 @@ public String handleStep3(@Valid RegisterRequest regReq, Errors errors) {
 	} catch (DuplicateMemberException ex) {
 			errors.rejectValue("email", "duplicate");
 //		errors.reject("notMatchingPassword");
+		return "register/step2";
+	} catch (CommandLine.DuplicateNameException ex1){
+
+		errors.rejectValue("name", "duplicate");
 		return "register/step2";
 	}
 }

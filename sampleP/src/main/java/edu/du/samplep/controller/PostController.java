@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostController {
@@ -51,25 +52,58 @@ public class PostController {
 
     // 모든 게시글 목록 조회
     @GetMapping("/")
-    public String getAllPostsWithPaging(Model model, @RequestParam(defaultValue = "0") int page) {
-        int pageSize = 5; // 한 페이지에 표시할 게시글 수
-        Page<Post> postPage = postService.getAllPostsWithPagingAndSorting(page, pageSize);
+    public String getAllPostsWithPaging(
+            Model model,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "type", required = false) String type) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+        System.out.println("현재 로그인된 이메일: " + currentUserEmail);
 
-        model.addAttribute("postsPage", postPage); // postsPage 객체를 모델에 추가
-        model.addAttribute("posts", postPage.getContent());
+        int pageSize = 6; // 한 페이지에 표시할 게시글 수
+        Page<Post> postPage;
+
+        List<Post> posts2 = postService.getTopViewedPosts();
+        // 검색 조건이 있을 경우 검색된 게시글을 가져오고, 없으면 전체 게시글을 가져옴
+        if (keyword != null && type != null && !keyword.isEmpty()) {
+            // 검색 요청 처리
+            postPage = postService.searchPosts(keyword, type, page, pageSize);
+        } else {
+            // 검색 요청이 없을 때 기본 게시글 조회
+            postPage = postService.getAllPostsWithPagingAndSorting(page, pageSize);
+        }
+
+        // 게시글 리스트 가져오기
+        List<Post> posts = postPage.getContent();
+
+        // 공지사항과 일반 게시글을 구분
+        List<Post> notices = posts.stream()
+                .filter(post -> post.getTitle().contains("(공지)"))
+                .collect(Collectors.toList());
+        List<Post> regularPosts = posts.stream()
+                .filter(post -> !post.getTitle().contains("(공지)"))
+                .collect(Collectors.toList());
+
+        // 공지사항은 검색과 무관하게 전체 공지사항 리스트를 표시
+        List<Post> allNotices = postService.getAllNotices();
+
+        // 모델에 전체 게시글 정보와 구분된 게시글 추가
+        model.addAttribute("postsPage", postPage);
+        model.addAttribute("posts", regularPosts);
+        model.addAttribute("notices", allNotices);
         model.addAttribute("totalPages", postPage.getTotalPages());
         model.addAttribute("currentPage", page);
-        model.addAttribute("commentService", commentService); // commentService 추가
-        return "basic";  // 게시글 목록을 보여주는 메인 페이지
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("type", type);
+        model.addAttribute("commentService", commentService);
+        model.addAttribute("topPosts", posts2);
+
+        return "basic";
     }
 
 
 
-    @GetMapping("/posts/bestPost")
-    public String getBestPost(Model model) {
-        model.addAttribute("posts",postService.getTopViewedPosts());
-        return "/posts/bestPost";
-    }
 
 
     // 게시글 작성 폼 (로그인한 사용자만 접근 가능)
@@ -95,6 +129,12 @@ public class PostController {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(username);
 
+            // 제목에 (공지)가 포함되면 일반 사용자는 작성 불가
+            if (post.getTitle().contains("(공지)") && !user.getRole().equals("ROLE_MANAGER")) {
+                redirectAttributes.addFlashAttribute("warningMessage", "일반 사용자는 '(공지)'로 시작하는 제목을 사용할 수 없습니다.");
+                return "redirect:/"; // 게시글 작성 폼으로 다시 리다이렉트
+            }
+
             // 게시글의 작성자 설정
             post.setUser(user);
 
@@ -111,6 +151,35 @@ public class PostController {
         } else {
             redirectAttributes.addFlashAttribute("warningMessage", "로그인이 필요합니다.");
             return "redirect:/";  // 로그인되지 않은 경우 로그인 페이지로 이동
+        }
+    }
+    @PostMapping("/posts/notice")
+    @PreAuthorize("hasRole('MANAGER')")
+    public String createNotice(@ModelAttribute Post post,
+                               @RequestParam("file") MultipartFile file,
+                               RedirectAttributes redirectAttributes) throws IOException {
+        if (isAuthenticated()) {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(username);
+
+            // 공지사항의 제목과 내용을 설정
+            post.setUser(user);
+            post.setNotice(true);
+            post.setTitle("(공지)" + post.getTitle());  // 공지사항 제목 앞에 '공지:' 추가
+
+            // 게시글 저장
+            Post savedPost = postService.savePost(post);
+
+            // 파일 업로드 처리
+            if (!file.isEmpty()) {
+                fileUploadService.uploadFile(file, savedPost.getId());
+            }
+
+            redirectAttributes.addFlashAttribute("successMessage", "공지사항이 작성되었습니다.");
+            return "redirect:/";  // 공지사항 작성 후 다시 공지사항 페이지로 리다이렉트
+        } else {
+            redirectAttributes.addFlashAttribute("warningMessage", "로그인이 필요합니다.");
+            return "redirect:/";  // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
         }
     }
 

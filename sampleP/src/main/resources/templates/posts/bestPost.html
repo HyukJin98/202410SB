@@ -33,21 +33,24 @@
 
 
     <!-- 게시글 목록 -->
-    <div class="post-list">
-      <div th:each="post : ${posts}" class="post">
+    <div th:if="${posts != null and posts.size() > 0}">
+      <div th:each="post : ${posts}" class="post regular-post">
         <h3>
-          <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">게시글 제목</a>
+          <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">
+            게시글 제목
+          </a>
         </h3>
         <p th:text="${post.content}">게시글 내용</p>
         <span>
-            작성자: <span th:if="${post.user != null}" th:text="${post.user.username}">작성자</span>
-                    <span th:if="${post.user == null}">알 수 없음</span>
-                    ||
+            작성자: <span th:if="${post.user != null}" th:text="${post.user.username}" style="font-weight: bold;">작성자</span>
+            <span th:if="${post.user == null}">알 수 없음</span>
+            ||
             작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</span>
-                    ||
-                    조회수: <span th:text="${post.views}"></span>
-
-            </span>
+            ||
+            조회수: <span th:text="${posts.views}"></span>
+            ||
+            댓글: <span th:text="${commentService.getCountComments(post.id)}"></span>
+        </span>
       </div>
     </div>
   </main>

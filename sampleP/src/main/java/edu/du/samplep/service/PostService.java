@@ -81,11 +81,28 @@ public class PostService {
     }
 
     public List<Post> getTopViewedPosts() {
-        return postRepository.findTop5ByOrderByViewsDesc();
+        return postRepository.findTop5ByIsNoticeFalseOrderByViewsDesc();
+    }
+
+    public List<Post> getAllNotices() {
+        // '공지'라는 단어가 포함된 게시글을 모두 가져옴
+        return postRepository.findByTitleContaining("(공지)");
     }
 
 
+    public Page<Post> searchPosts(String keyword, String type, int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
 
-
+        switch (type) {
+            case "title":
+                return postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+            case "content":
+                return postRepository.findByContentContainingIgnoreCase(keyword, pageable);
+            case "user":
+                return postRepository.findByUser_UsernameContainingIgnoreCase(keyword, pageable);
+            default:
+                return postRepository.findAll(pageable);
+        }
+    }
 
 }

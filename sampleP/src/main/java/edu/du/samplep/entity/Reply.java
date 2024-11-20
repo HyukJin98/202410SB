@@ -28,6 +28,10 @@ public class Reply {
     @Column(nullable = false)
     private String content; // 답글 내용
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now(); // 답글 작성일
 

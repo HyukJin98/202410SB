@@ -29,6 +29,17 @@ public class CommentService {
         return commentRepository.countByPost_Id(postId);
     }
 
+    public long getCountReplies(Long postId) {
+        return commentRepository.findByPost_Id(postId).stream()
+                .mapToLong(comment -> comment.getReplies().size()) // 댓글에 대한 대댓글 수 합산
+                .sum();
+    }
+    public long getTotalCommentCount(Long postId) {
+        long commentCount = getCountComments(postId);  // 댓글 수
+        long replyCount = getCountReplies(postId);     // 대댓글 수
+        return commentCount + replyCount;              // 댓글 수와 대댓글 수 합산
+    }
+
     public List<Comment> getCommentsByPostId(Long postId) {
         return commentRepository.findByPostId(postId);
     }

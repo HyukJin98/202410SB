@@ -1,9 +1,10 @@
 package edu.du.samplep.service;
 
-import edu.du.samplep.entity.Post;
 import edu.du.samplep.entity.User;
+import edu.du.samplep.repository.FriendshipRepository;
 import edu.du.samplep.repository.PostRepository;
 import edu.du.samplep.repository.UserRepository;
+import groovyjarjarpicocli.CommandLine;
 import javassist.bytecode.DuplicateMemberException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +28,8 @@ public class UserService {
 
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    private FriendshipRepository friendshipRepository;
 
 
     public User updateUser(Long id, User userDetails) {
@@ -36,12 +38,14 @@ public class UserService {
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(userDetails.getPassword());
 
+
         // 빌더 패턴을 사용하여 사용자 정보를 업데이트
         user = User.builder()
                 .id(user.getId()) // 기존 ID를 유지
                 .email(userDetails.getEmail())
                 .username(userDetails.getUsername())
-                .password(encodedPassword)  // 암호화된 비밀번호 저장
+                .password(encodedPassword)
+                .role("USER")// 암호화된 비밀번호 저장
                 .build();
 
         user = userRepository.save(user);
@@ -77,16 +81,22 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public Long register(RegisterRequest req) throws DuplicateMemberException {
+    public Long register(RegisterRequest req) throws javassist.bytecode.DuplicateMemberException {
         Optional<User> user = userRepository.findByEmail(req.getEmail());
+        User user2 = userRepository.findByUsername(req.getName());
         if (user.isPresent()) {
             throw new DuplicateMemberException("Email already exists: " + req.getEmail());
+        }
+
+        if(user2.getName().equals(req.getName())) {
+            throw new CommandLine.DuplicateNameException("Name already exists: " + req.getName());
         }
 
         User newUser = User.builder()
                 .email(req.getEmail())
                 .password(passwordEncoder().encode(req.getPassword()))
                 .username(req.getName())
+                .role("USER")
                 .build();
 
         userRepository.save(newUser);
@@ -101,6 +111,25 @@ public class UserService {
     private PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    public List<User> findUsersByNameContaining(String searchTerm, User currentUser) {
+        return userRepository.findByUsernameContainingAndUsernameNot(searchTerm, currentUser.getUsername());
+    }
+    // 사용자명으로 사용자 찾기
+
+
+
+
+    // 현재 사용자 제외한 모든 사용자 조회
+    public List<User> findAllUsersExcept(User user) {
+        return userRepository.findAllByIdNot(user.getId());
+    }
+
+    // 사용자 ID로 찾기 (Optional을 처리하여 반환)
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
 
 
 }
