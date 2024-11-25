@@ -15,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -79,6 +78,33 @@ public class UserController {
         );
 
         return ResponseEntity.ok("회원 정보가 수정되었습니다. 다시 로그인 해주세요");  // 성공 시 메시지 반환
+    }
+
+    // 회원 관리 페이지
+    @GetMapping("/user/user-management")
+    public String showUserManagement(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "/user/user-management";
+    }
+
+    // 7일 정지 처리
+    @PostMapping("/user/suspend/7days/{id}")
+    public String suspendFor7Days(@PathVariable Long id) {
+        userService.suspendUser(id, 7);
+        return "redirect:/user/user-management";
+    }
+
+    // 30일 정지 처리
+    @PostMapping("/user/suspend/30days/{id}")
+    public String suspendFor30Days(@PathVariable Long id) {
+        userService.suspendUser(id, 30);
+        return "redirect:/user/user-management";
+    }
+
+    @PostMapping("/user/unsuspend/{id}")
+    public String unsuspendUser(@PathVariable Long id) {
+        userService.unsuspendUser(id); // 정지 해제 로직
+        return "redirect:/user/user-management"; // 회원 관리 페이지로 리다이렉트
     }
 
     // WebDataBinder에 유효성 검사기 추가

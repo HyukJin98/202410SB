@@ -1,20 +1,13 @@
 package edu.du.samplep.controller;
 
-import edu.du.samplep.entity.Comment;
-import edu.du.samplep.entity.FileUpload;
-import edu.du.samplep.entity.Post;
-import edu.du.samplep.entity.User;
-import edu.du.samplep.repository.FileUploadRepository;
+import edu.du.samplep.entity.*;
+import edu.du.samplep.repository.CommentRepository;
 import edu.du.samplep.service.CommentService;
 import edu.du.samplep.service.FileUploadService;
 import edu.du.samplep.service.PostService;
 import edu.du.samplep.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,11 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,59 +37,61 @@ public class PostController {
     private FileUploadService fileUploadService;
 
     @Autowired
-    private FileUploadRepository fileUploadRepository;
+    private CommentRepository commentRepository;
 
     // 모든 게시글 목록 조회
     @GetMapping("/")
-    public String getAllPostsWithPaging(
-            Model model,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(value = "keyword", required = false) String keyword,
-            @RequestParam(value = "type", required = false) String type) {
+    public String getAllPostsWithPaging(Model model,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(value = "keyword", required = false) String keyword,
+                                        @RequestParam(value = "type", required = false) String type) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserEmail = authentication.getName();
         System.out.println("현재 로그인된 이메일: " + currentUserEmail);
 
-        int pageSize = 6; // 한 페이지에 표시할 게시글 수
+        // 기본 pageSize 설정
+        int pageSize = 5;
         Page<Post> postPage;
 
         List<Post> posts2 = postService.getTopViewedPosts();
         // 검색 조건이 있을 경우 검색된 게시글을 가져오고, 없으면 전체 게시글을 가져옴
         if (keyword != null && type != null && !keyword.isEmpty()) {
-            // 검색 요청 처리
             postPage = postService.searchPosts(keyword, type, page, pageSize);
         } else {
-            // 검색 요청이 없을 때 기본 게시글 조회
             postPage = postService.getAllPostsWithPagingAndSorting(page, pageSize);
         }
 
         // 게시글 리스트 가져오기
         List<Post> posts = postPage.getContent();
 
-        // 공지사항과 일반 게시글을 구분
-        List<Post> notices = posts.stream()
-                .filter(post -> post.getTitle().contains("(공지)"))
-                .collect(Collectors.toList());
-        List<Post> regularPosts = posts.stream()
-                .filter(post -> !post.getTitle().contains("(공지)"))
-                .collect(Collectors.toList());
+        // 공지사항은 페이징 없이 가져오기
+        List<Post> notices = postService.getAllNotices(); // 공지사항 페이징 제거, 전체 공지사항 목록
 
-        // 공지사항은 검색과 무관하게 전체 공지사항 리스트를 표시
-        List<Post> allNotices = postService.getAllNotices();
+        // 공지사항이 있으면 페이지 사이즈를 1 늘려줌
+        int adjustedPageSize = notices.isEmpty() ? pageSize : pageSize + 1;
+
+        // (isNotice == false)인 게시글에만 페이지네이션 적용
+        List<Post> regularPosts = posts.stream()
+                .filter(post -> !post.isNotice())  // isNotice가 false인 게시글만 필터링
+                .collect(Collectors.toList()); // 일반 게시글 리스트
 
         // 모델에 전체 게시글 정보와 구분된 게시글 추가
         model.addAttribute("postsPage", postPage);
-        model.addAttribute("posts", regularPosts);
-        model.addAttribute("notices", allNotices);
+        model.addAttribute("posts", regularPosts);  // 일반 게시글만 페이지네이션 적용
+        model.addAttribute("notices", notices); // 공지사항 리스트
         model.addAttribute("totalPages", postPage.getTotalPages());
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", keyword);
         model.addAttribute("type", type);
         model.addAttribute("commentService", commentService);
         model.addAttribute("topPosts", posts2);
+        model.addAttribute("adjustedPageSize", adjustedPageSize); // 페이지 사이즈 조정값
 
         return "basic";
     }
+
+
 
 
 
@@ -187,24 +178,38 @@ public class PostController {
     // 게시글 상세보기
     @GetMapping("/posts/{id}")
     public String getPostDetail(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
-        if (isAuthenticated()) { // 로그인 여부 확인
-            Optional<Post> post = postService.getPostById(id);
-            if (post.isPresent()) {
-                model.addAttribute("post", post.get());
-                model.addAttribute("comments", commentService.getCommentsByPostId(id));
-                model.addAttribute("postId", id);
-                return "posts/detail";
+        Optional<Post> post = postService.getPostById(id);
+
+        if (post.isPresent()) {
+            // 줄바꿈을 <br>로 변환 (게시글 내용)
+            String contentWithBr = post.get().getContent().replace("\n", "<br/>");
+            model.addAttribute("post", post.get());
+            model.addAttribute("postContent", contentWithBr); // 변환된 content 전달
+
+            // 댓글 및 답글 내용 줄바꿈 처리
+            List<Comment> comments = commentService.getCommentsByPostId(id);
+            for (Comment comment : comments) {
+                String commentContentWithBr = comment.getContent().replace("\n", "<br/>");
+                comment.setContent(commentContentWithBr); // 댓글 내용 변환
+
+                // 답글 내용 변환
+                List<Reply> replies = comment.getReplies();
+                for (Reply reply : replies) {
+                    String replyContentWithBr = reply.getContent().replace("\n", "<br/>");
+                    reply.setContent(replyContentWithBr); // 답글 내용 변환
+                }
             }
-            else {
-                redirectAttributes.addFlashAttribute("warningMessage", "게시글을 찾을 수 없습니다.");
-                return "redirect:/"; // 게시글을 찾을 수 없을 때 리다이렉트
-            }
-        }
-        else {
-            redirectAttributes.addFlashAttribute("warningMessage", "로그인이 필요합니다.");
-            return "redirect:/"; // 로그인 페이지로 리다이렉트
+            model.addAttribute("comments", comments); // 변환된 댓글들 및 답글들 전달
+
+            model.addAttribute("postId", id);
+            return "posts/detail";
+        } else {
+            redirectAttributes.addFlashAttribute("warningMessage", "게시글을 찾을 수 없습니다.");
+            return "redirect:/"; // 게시글을 찾을 수 없을 때 리다이렉트
         }
     }
+
+
 
     // 게시글 삭제 (작성자만 삭제 가능)
     @PostMapping("/posts/{id}")

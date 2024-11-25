@@ -5,21 +5,34 @@
   box-sizing: border-box;
 }
 
-body {
-  display: contents;
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
+@font-face {
+  font-family: 'MyFont';
+  src: url('/font/Poppins-Thin.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-/* 전체 레이아웃 */
+body {
+  background-image: url("/images/치이카와.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'MyFont', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 기본적으로 스크롤 없애기 */
+}
+
 /* 전체 레이아웃 */
 .container {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   padding: 20px;
+  width: 100%; /* 화면 크기에 맞춰 너비 100% */
+  min-width: 1200px; /* 최소 너비 고정 (필요시) */
+  font-family: 'MyFont', sans-serif;
 }
+
 
 /* 왼쪽 사이드바 */
 .sidebar {
@@ -34,7 +47,7 @@ body {
 
 .sidebar a {
   display: block;
-  font-size: 1.5em;
+  font-size: 1.0em;
   font-weight: bold;
   text-decoration: none;
   color: #333;
@@ -311,17 +324,18 @@ body {
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
+  body {
+    overflow: auto; /* 화면 크기가 작을 때 스크롤 허용 */
+  }
+
   .container {
-    flex-direction: column;
+    flex-direction: row; /* 화면이 좁아지면 세로로 나열 */
     align-items: center;
+    gap: 10px; /* 세로로 배치 시 간격 조정 */
   }
 
   .sidebar, .main-content, .right-widget {
-    width: 100%;
-    margin-bottom: 20px;
-  }
-
-  .sidebar {
+    width: 100%; /* 화면 크기에 맞춰서 너비 조정 */
     margin-bottom: 20px;
   }
 }

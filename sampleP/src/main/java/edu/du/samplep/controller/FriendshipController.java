@@ -4,7 +4,6 @@ import edu.du.samplep.entity.Friendship;
 import edu.du.samplep.entity.User;
 import edu.du.samplep.repository.FriendshipRepository;
 import edu.du.samplep.service.FriendshipService;
-import edu.du.samplep.service.UserDetailService;
 import edu.du.samplep.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -26,7 +25,6 @@ import java.util.List;
 public class FriendshipController {
 
     private final FriendshipService friendshipService;
-    private final UserDetailService userDetailService;
     private final UserService userService;
     private final FriendshipRepository friendshipRepository;
 

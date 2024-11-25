@@ -20,8 +20,6 @@ class SamplePApplicationTests {
     PostRepository postRepository;
     @Autowired
     private CommentRepository commentRepository;
-    @Autowired
-    private NoticeRepository noticeRepository;
 
     @Test
     void contextLoads() {
