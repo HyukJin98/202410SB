@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학적 관리</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="header">
+    <h1>학적 관리</h1>
+    <a th:href="@{/}" class="button">메인으로</a>
+</div>
+<div class="sidebar">
+    <ul>
+        <li><a th:href="@{/academic}" class="active">학적</a></li>
+        <li><a th:href="@{/course}">수강</a></li>
+        <li><a th:href="@{/grades}">성적</a></li>
+        <li><a th:href="@{/scholarship}">장학</a></li>
+    </ul>
+</div>
+<div class="content">
+    <h2>학적 정보</h2>
+    <p>이름: 이혁진</p>
+    <p>학번: 20201234</p>
+    <p>학적 상태: 재학</p>
+    <p>학과: 컴퓨터소프트웨어학과</p>
+    <p>...</p>
+</div>
+</body>
+</html>

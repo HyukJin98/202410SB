@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>통합관리</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="header">
+    <h1>통합관리 페이지</h1>
+    <a th:href="@{/}" class="button">메인으로</a>
+</div>
+<div class="sidebar">
+    <ul>
+        <li><a href="/academic">학적</a></li>
+        <li><a href="/course">수강</a></li>
+        <li><a href="/grades">성적</a></li>
+        <li><a href="#">장학</a></li>
+        <li><a href="#">등록</a></li>
+    </ul>
+</div>
+<div class="content">
+    <p>통합관리 상세 내용이 여기에 표시됩니다.</p>
+</div>
+</body>
+</html>

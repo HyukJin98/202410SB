@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내 강좌</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>내 강좌</h2>
+        
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+                <a class="nav-link active" href="#current" data-bs-toggle="tab">수강중인 강좌</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#completed" data-bs-toggle="tab">수료한 강좌</a>
+            </li>
+        </ul>
+        
+        <div class="tab-content">
+            <div class="tab-pane active" id="current">
+                <div class="row">
+                    <div th:each="enrollment : ${currentEnrollments}" class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${enrollment.course.title}">강좌 제목</h5>
+                                <p class="card-text">
+                                    진도율: <span th:text="${enrollment.progressRate}">0</span>%
+                                </p>
+                                <a th:href="@{/courses/{id}(id=${enrollment.course.id})}" 
+                                   class="btn btn-primary">학습하기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-pane" id="completed">
+                <div class="row">
+                    <div th:each="enrollment : ${completedEnrollments}" class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${enrollment.course.title}">강좌 제목</h5>
+                                <p class="card-text">
+                                    수료일: <span th:text="${#temporals.format(enrollment.completedAt, 'yyyy-MM-dd')}">
+                                    </span>
+                                </p>
+                                <a th:href="@{/courses/{id}(id=${enrollment.course.id})}" 
+                                   class="btn btn-secondary">다시보기</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>성적 관리</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="header">
+    <h1>성적 관리</h1>
+    <a th:href="@{/}" class="button">메인으로</a>
+</div>
+<div class="sidebar">
+    <ul>
+        <li><a th:href="@{/academic}">학적</a></li>
+        <li><a th:href="@{/course}">수강</a></li>
+        <li><a th:href="@{/grades}" class="active">성적</a></li>
+        <li><a th:href="@{/scholarship}">장학</a></li>
+    </ul>
+</div>
+<div class="content">
+    <h2>성적 내역</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>과목명</th>
+            <th>학점</th>
+            <th>성적</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>빅데이터프로그래밍</td>
+            <td>3</td>
+            <td>A</td>
+        </tr>
+        <tr>
+            <td>웹 프로그래밍</td>
+            <td>3</td>
+            <td>B+</td>
+        </tr>
+        <tr>
+            <td>자바 프로그래밍</td>
+            <td>3</td>
+            <td>A+</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
