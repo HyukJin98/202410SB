@@ -7,6 +7,7 @@ import edu.du.samplep.service.FileUploadService;
 import edu.du.samplep.service.PostService;
 import edu.du.samplep.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,6 +42,8 @@ public class PostController {
     @Autowired
     private CommentRepository commentRepository;
 
+
+
     // 모든 게시글 목록 조회
     @GetMapping("/")
     public String getAllPostsWithPaging(Model model,
@@ -49,6 +54,7 @@ public class PostController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserEmail = authentication.getName();
         System.out.println("현재 로그인된 이메일: " + currentUserEmail);
+        System.out.println("Current working directory: " + System.getProperty("user.dir"));
 
         // 기본 pageSize 설정
         int pageSize = 6;

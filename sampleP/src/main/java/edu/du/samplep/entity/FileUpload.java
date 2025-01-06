@@ -19,6 +19,8 @@ public class FileUpload {
 
     private String fileName; // 원본 파일명
 
+    private String originalFileName;
+
     private String filePath; // 저장된 파일 경로
 
     private Long fileSize; // 파일 크기

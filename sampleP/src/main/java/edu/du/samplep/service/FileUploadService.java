@@ -32,24 +32,25 @@ public class FileUploadService {
         this.postRepository = postRepository;
     }
 
-    // 업로드 디렉토리 생성 확인
     @PostConstruct
     public void init() {
-        // uploadDir 값이 null인지 확인
         if (uploadDir == null || uploadDir.isEmpty()) {
             throw new IllegalArgumentException("uploadDir is not defined in application.properties");
         }
 
-        System.out.println("Upload directory: " + uploadDir);  // 디버깅 출력
+        Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
+        System.out.println("Resolved upload path: " + uploadPath);
 
-        // 업로드 디렉토리가 존재하지 않으면 생성
-        Path uploadPath = Paths.get(uploadDir);
-        if (!Files.exists(uploadPath)) {
-            try {
+
+        try {
+            if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not create upload directory", e);
+                System.out.println("Created upload directory: " + uploadPath);
+            } else if (!Files.isDirectory(uploadPath)) {
+                throw new RuntimeException("Path exists but is not a directory: " + uploadPath);
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create or access upload directory", e);
         }
     }
 
@@ -61,7 +62,8 @@ public class FileUploadService {
 
         // 파일 이름과 경로 설정
         String fileName = file.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+        Path filePath = Paths.get(uploadDir).toAbsolutePath().normalize().resolve(fileName);
+        System.out.println("Saving file to: " + filePath);
 
         // 파일 저장
         file.transferTo(filePath.toFile());
